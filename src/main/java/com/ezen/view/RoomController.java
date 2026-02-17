@@ -15,6 +15,7 @@ import com.ezen.biz.dto.MemberVO;
 import com.ezen.biz.dto.RoomVO;
 import com.ezen.biz.service.AccommodationService;
 import com.ezen.biz.service.RoomService;
+import com.ezen.view.support.WebParamSanitizer;
 
 import utils.Criteria;
 import utils.PageMaker;
@@ -37,7 +38,6 @@ public class RoomController {
 		model.addAttribute("checkout", checkout);
 		model.addAttribute("accommodationName", accommodationName);
 		return "room/roomList";
-
 	}
 
 	@RequestMapping("/updateRoom")
@@ -50,26 +50,24 @@ public class RoomController {
 		model.addAttribute("checkout", checkout);
 		model.addAttribute("accommodationName", accommodationName);
 		return "room/roomList";
-
 	}
 
 	@RequestMapping("/selectedAccommodation")
 	public String accSearchList(@RequestParam(value = "pageNum", defaultValue = "1") String pageNum,
 			@RequestParam(value = "rowsPerPage", defaultValue = "10") String rowsPerPage,
-			@RequestParam(value = "key", defaultValue = "") int aseq, Model model) {
+			@RequestParam(value = "key", defaultValue = "0") String key, Model model) {
 
 		Criteria criteria = new Criteria();
-		criteria.setPageNum(Integer.parseInt(pageNum));
-		criteria.setRowsPerPage(Integer.parseInt(rowsPerPage));
-		// (1) 전체 숙소목록 조회
+		criteria.setPageNum(WebParamSanitizer.parseInt(pageNum, 1, 1, 10000));
+		criteria.setRowsPerPage(WebParamSanitizer.parseInt(rowsPerPage, 10, 5, 20));
+		int aseq = WebParamSanitizer.parseInt(key, 0, 0, Integer.MAX_VALUE);
+
 		List<RoomVO> roomList = roomService.getRoomListWithPaging(criteria, aseq);
 
-		// (2) 화면에 표시할 페이지 버튼 정보 설정(PageMaker 클래스 이용)
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
 		pageMaker.setTotalCount(roomService.countRoomList(aseq));
 
-		// (3) model 객체에 숙소 목록 저장
 		model.addAttribute("roomList", roomList);
 		model.addAttribute("roomListSize", roomList.size());
 		model.addAttribute("pageMaker", pageMaker);
@@ -91,14 +89,13 @@ public class RoomController {
 		MemberVO loginUser = (MemberVO) session.getAttribute("loginUser");
 		if (loginUser == null) {
 			return "member/login";
-		} else {
-			int rseq = vo.getRseq();
-			RoomVO accRoom = roomService.getAccByRseq(rseq);
-			model.addAttribute("checkin", checkin);
-			model.addAttribute("checkout", checkout);
-			model.addAttribute("accRoom", accRoom);
-			return "room/booking";
 		}
-	}
 
-}// RoomController
+		int rseq = vo.getRseq();
+		RoomVO accRoom = roomService.getAccByRseq(rseq);
+		model.addAttribute("checkin", checkin);
+		model.addAttribute("checkout", checkout);
+		model.addAttribute("accRoom", accRoom);
+		return "room/booking";
+	}
+}

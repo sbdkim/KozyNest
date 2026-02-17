@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.ezen.biz.dto.MemberVO;
 import com.ezen.biz.dto.QnaVO;
 import com.ezen.biz.service.QnaService;
+import com.ezen.view.support.WebParamSanitizer;
 
 import utils.Criteria;
 import utils.PageMaker;
@@ -99,8 +100,8 @@ public class QnaController {
 			@RequestParam(value = "rowsPerPage", defaultValue = "10") String rowsPerPage, Model model) {
 		
 		Criteria criteria = new Criteria();
-		criteria.setPageNum(Integer.parseInt(pageNum));
-		criteria.setRowsPerPage(Integer.parseInt(rowsPerPage));
+		criteria.setPageNum(WebParamSanitizer.parseInt(pageNum, 1, 1, 10000));
+		criteria.setRowsPerPage(WebParamSanitizer.parseInt(rowsPerPage, 10, 5, 20));
 		
 		List<QnaVO> qnaList = qnaService.getListQnaWithPaging(criteria);
 		
