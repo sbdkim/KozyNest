@@ -25,12 +25,14 @@ public class RoomDAO {
 	public List<RoomVO> listRoomWithPaging(Criteria criteria, int aseq) {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("criteria", criteria);
-		map.put("name", aseq);
+		map.put("aseq", aseq);
 		return mybatis.selectList("RoomMapper.listRoomWithPaging", map);
 	}// selectRoomByAcc
 
 	public int countRoomList(int aseq) {
-		return mybatis.selectOne("RomMapper.countRoomList", aseq);
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("aseq", aseq);
+		return mybatis.selectOne("RoomMapper.countRoomList", map);
 	}
 
 	public RoomVO selectRoomByRseq(RoomVO vo) {

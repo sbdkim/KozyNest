@@ -1,11 +1,25 @@
 package com.ezen.biz.dto;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 public class HostVO {
 	
 	// Fields
+	@NotBlank(message = "Host email is required.")
+	@Email(message = "Host email format is invalid.")
+	@Size(max = 100, message = "Host email is too long.")
 	private String hemail;
+	@NotBlank(message = "Password is required.")
+	@Size(min = 8, max = 64, message = "Password must be 8 to 64 characters.")
 	private String pwd;
+	@NotBlank(message = "Phone is required.")
+	@Pattern(regexp = "^[0-9\\-]{8,20}$", message = "Phone format is invalid.")
 	private String phone;
+	@NotBlank(message = "Name is required.")
+	@Size(max = 50, message = "Name is too long.")
 	private String name;
 	private int status;
 

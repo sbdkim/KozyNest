@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.ezen.biz.dao.MapDAO;
 import com.ezen.biz.dto.Location;
 
-@Service("mapService")
+@Service
 public class MapServiceImpl implements MapService {
 
 	@Autowired
@@ -20,3 +20,4 @@ public class MapServiceImpl implements MapService {
 	}
 
 }
+

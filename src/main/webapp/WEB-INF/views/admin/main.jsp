@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
   pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>  
@@ -12,10 +12,10 @@
 function admin_check()
 {
   if(document.frm.id.value==""){
-      alert("아이디를 입력하세요.");
+      alert("?꾩씠?붾? ?낅젰?섏꽭??");
       return false;
   } else if(document.frm.pwd.value==""){
-     alert("비밀번호를 입력하세요.");
+     alert("鍮꾨?踰덊샇瑜??낅젰?섏꽭??");
       return false;
   }
   
@@ -37,21 +37,21 @@ function admin_check()
     <div class="clear"></div>
     <article>
       <div id="loginform">
-      <form name="frm" method="post" action="admin_login">
+      <form name="frm" method="post" action="admin_login" autocomplete="on">
       <table>
         <tr>
-          <td> 아 이 디 </td>
-          <td> <input type="text" id="workId" name="id" size="10" value="admin"></td>
+          <td> ??????</td>
+          <td> <input type="text" id="workId" name="id" size="10" autocomplete="username" required></td>
         </tr>
         <tr>
-          <td> 비밀번호 </td>
+          <td> 鍮꾨?踰덊샇 </td>
           <td> 
-            <input type="password" id="workPw" name="pwd" size="10" value="admin">
+            <input type="password" id="workPw" name="pwd" size="10" autocomplete="current-password" required>
           </td>
         </tr>
         <tr align="center" >
           <td  colspan="2">          
-            <input class="btn" type="submit" value="업무 로그인" onclick="return admin_check()"><br><br>
+            <input class="btn" type="submit" value="?낅Т 濡쒓렇?? onclick="return admin_check()"><br><br>
             <h4 style="color:red">${message}</h4>
           </td>
         </tr>

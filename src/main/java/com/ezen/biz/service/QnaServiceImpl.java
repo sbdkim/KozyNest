@@ -10,7 +10,7 @@ import com.ezen.biz.dto.QnaVO;
 
 import utils.Criteria;
 
-@Service("qnaService")
+@Service
 public class QnaServiceImpl implements QnaService {
 
 	@Autowired
@@ -53,3 +53,4 @@ public class QnaServiceImpl implements QnaService {
 	}
 
 }
+

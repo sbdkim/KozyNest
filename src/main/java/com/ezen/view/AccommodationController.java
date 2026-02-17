@@ -22,7 +22,7 @@ public class AccommodationController {
 
 	@RequestMapping("/search")
 	public String searchView(AccommodationVO vo, Model model) {
-		String address = vo.getAddress();
+		String address = normalizeAddress(vo.getAddress());
 		List<AccommodationVO> accommodationList = accommodationService.selectAccByAdd(address);
 		model.addAttribute("accommodationList", accommodationList);
 		return "accommodation/accList";
@@ -34,28 +34,46 @@ public class AccommodationController {
 			@RequestParam(value = "key", defaultValue = "") String address,
 			@RequestParam(value = "checkin", defaultValue = "") String checkin,
 			@RequestParam(value = "checkout", defaultValue = "") String checkout,
-			@RequestParam(value = "ro_count", defaultValue = "") String ro_count, Model model) {
+			@RequestParam(value = "ro_count", defaultValue = "") String roCount, Model model) {
 
 		Criteria criteria = new Criteria();
-		criteria.setPageNum(Integer.parseInt(pageNum));
-		criteria.setRowsPerPage(Integer.parseInt(rowsPerPage));
-		// (1) 전체 숙소목록 조회
-		List<AccommodationVO> accommodationList = accommodationService.getListAccWithPaging(criteria, address);
+		criteria.setPageNum(parseIntOrDefault(pageNum, 1));
+		criteria.setRowsPerPage(parseIntOrDefault(rowsPerPage, 10));
 
-		// (2) 화면에 표시할 페이지 버튼 정보 설정(PageMaker 클래스 이용)
+		String normalizedAddress = normalizeAddress(address);
+		List<AccommodationVO> accommodationList = accommodationService.getListAccWithPaging(criteria, normalizedAddress);
+
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
-		pageMaker.setTotalCount(accommodationService.countAccList(address));
+		pageMaker.setTotalCount(accommodationService.countAccList(normalizedAddress));
 
-		// (3) model 객체에 숙소 목록 저장
 		model.addAttribute("accommodationList", accommodationList);
 		model.addAttribute("accommodationListSize", accommodationList.size());
 		model.addAttribute("pageMaker", pageMaker);
-		model.addAttribute("key", address);
+		model.addAttribute("key", normalizedAddress);
 		model.addAttribute("checkin", checkin);
 		model.addAttribute("checkout", checkout);
-		model.addAttribute("ro_count", ro_count);
+		model.addAttribute("ro_count", roCount);
 
 		return "accommodation/accList";
+	}
+
+	private int parseIntOrDefault(String value, int defaultValue) {
+		try {
+			return Integer.parseInt(value);
+		} catch (NumberFormatException ex) {
+			return defaultValue;
+		}
+	}
+
+	private String normalizeAddress(String address) {
+		if (address == null) {
+			return "";
+		}
+		String normalized = address.trim();
+		if (normalized.length() > 100) {
+			return normalized.substring(0, 100);
+		}
+		return normalized;
 	}
 }

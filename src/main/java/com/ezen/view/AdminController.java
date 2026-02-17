@@ -21,6 +21,7 @@ import com.ezen.biz.service.BookingService;
 import com.ezen.biz.service.HostService;
 import com.ezen.biz.service.MemberService;
 import com.ezen.biz.service.QnaService;
+import com.ezen.view.support.WebParamSanitizer;
 
 import utils.Criteria;
 import utils.PageMaker;
@@ -104,17 +105,18 @@ public class AdminController {
 			@RequestParam(value = "key", defaultValue = "") String name, Model model) {
 
 		Criteria criteria = new Criteria();
-		criteria.setPageNum(Integer.parseInt(pageNum));
-		criteria.setRowsPerPage(Integer.parseInt(rowsPerPage));
-		List<HostVO> hostList = hostService.getListHostWithPaging(criteria, name);
+		criteria.setPageNum(WebParamSanitizer.parseInt(pageNum, 1, 1, 10000));
+		criteria.setRowsPerPage(WebParamSanitizer.parseInt(rowsPerPage, 10, 5, 20));
+		String normalizedName = WebParamSanitizer.normalizeKeyword(name, 100);
+		List<HostVO> hostList = hostService.getListHostWithPaging(criteria, normalizedName);
 
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
-		pageMaker.setTotalCount(hostService.countHostList(name));
+		pageMaker.setTotalCount(hostService.countHostList(normalizedName));
 
 		model.addAttribute("hostList", hostList);
 		model.addAttribute("hostListSize", hostList.size());
-		model.addAttribute("key", name);
+		model.addAttribute("key", normalizedName);
 		model.addAttribute("pageMaker", pageMaker);
 
 		return "admin/host/hostList";
@@ -126,17 +128,18 @@ public class AdminController {
 			@RequestParam(value = "key", defaultValue = "") String name, Model model) {
 
 		Criteria criteria = new Criteria();
-		criteria.setPageNum(Integer.parseInt(pageNum));
-		criteria.setRowsPerPage(Integer.parseInt(rowsPerPage));
-		List<MemberVO> memberList = memberService.getListMemberWithPaging(criteria, name);
+		criteria.setPageNum(WebParamSanitizer.parseInt(pageNum, 1, 1, 10000));
+		criteria.setRowsPerPage(WebParamSanitizer.parseInt(rowsPerPage, 10, 5, 20));
+		String normalizedName = WebParamSanitizer.normalizeKeyword(name, 100);
+		List<MemberVO> memberList = memberService.getListMemberWithPaging(criteria, normalizedName);
 
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
-		pageMaker.setTotalCount(memberService.countMemberList(name));
+		pageMaker.setTotalCount(memberService.countMemberList(normalizedName));
 
 		model.addAttribute("memberList", memberList);
 		model.addAttribute("memberListSize", memberList.size());
-		model.addAttribute("key", name);
+		model.addAttribute("key", normalizedName);
 		model.addAttribute("pageMaker", pageMaker);
 
 		return "admin/member/memberList";

@@ -3,32 +3,34 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:bean="http://www.springframework.org/schema/beans"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
 	<context:component-scan base-package="com.ezen.view"></context:component-scan>
-	
-	<mvc:annotation-driven></mvc:annotation-driven>
-	
-	<!-- 리소스 경로 설정 -->
+
+	<mvc:annotation-driven validator="validator"></mvc:annotation-driven>
+
 	<mvc:resources location="/WEB-INF/resources/css/" mapping="/css/**"></mvc:resources>
 	<mvc:resources location="/WEB-INF/resources/images/" mapping="/images/**"></mvc:resources>
-	<mvc:resources location="/WEB-INF/resources/accommodation_images/" mapping="/accommodation_images/**"></mvc:resources>
-	<mvc:resources location="/WEB-INF/resources/room_images/" mapping="/room_images/**"></mvc:resources>
+	<mvc:resources location="file:${user.home}/.kozynest/uploads/accommodation_images/,/WEB-INF/resources/accommodation_images/" mapping="/accommodation_images/**"></mvc:resources>
+	<mvc:resources location="file:${user.home}/.kozynest/uploads/room_images/,/WEB-INF/resources/room_images/" mapping="/room_images/**"></mvc:resources>
 	<mvc:resources location="/WEB-INF/views/member/" mapping="/member/**"></mvc:resources>
 	<mvc:resources location="/WEB-INF/views/mypage/" mapping="/mypage/**"></mvc:resources>
 	<mvc:resources location="/WEB-INF/views/admin/" mapping="/admin/**"></mvc:resources>
 	<mvc:resources location="/WEB-INF/views/accommodation/" mapping="/accommodation/**"></mvc:resources>
 	<mvc:resources location="/WEB-INF/views/room/" mapping="/room/**"></mvc:resources>
 	<mvc:resources location="/WEB-INF/views/qna/" mapping="/qna/**"></mvc:resources>
-	
-	<!-- 파일 전송 설정 -->
+
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<property name="maxUploadSize" value="-1"></property>
+		<property name="maxUploadSize" value="10485760"></property>
+		<property name="maxUploadSizePerFile" value="5242880"></property>
+		<property name="maxInMemorySize" value="4096"></property>
 	</bean>
-	
-	<!-- JSP View Resolver -->
+
+	<bean:bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"></bean:bean>
+
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/views/"></property>
 		<property name="suffix" value=".jsp"></property>

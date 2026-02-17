@@ -1,0 +1,10 @@
+# Local environment files
+.env
+.env.local
+
+# Local secret overrides (outside classpath and machine-specific)
+.kozynest/
+
+# IDE/system noise
+.DS_Store
+Thumbs.db

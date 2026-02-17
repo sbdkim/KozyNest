@@ -10,7 +10,7 @@ import com.ezen.biz.dto.AccommodationVO;
 import com.ezen.biz.dto.BookingVO;
 import com.ezen.biz.dto.SalesQuantity;
 
-@Service("bookingService")
+@Service
 public class BookingServiceImpl implements BookingService {
 
 	@Autowired
@@ -90,3 +90,4 @@ public class BookingServiceImpl implements BookingService {
 
 
 }
+

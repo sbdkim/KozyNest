@@ -10,7 +10,7 @@ import com.ezen.biz.dto.AccommodationVO;
 
 import utils.Criteria;
 
-@Service("accommodationService")
+@Service
 public class AccommodationServiceImpl implements AccommodationService {
 
 	@Autowired
@@ -92,3 +92,4 @@ public class AccommodationServiceImpl implements AccommodationService {
 
 
 }
+

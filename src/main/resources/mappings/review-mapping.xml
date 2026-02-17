@@ -21,7 +21,7 @@
 	
 	<!-- 객실번호로 리뷰 조회 -->
 	<select id="selectReviewByRseq" resultType="review">
-		SELECT * FROM revie
+		SELECT * FROM review
 		WHERE rseq=#{rseq}
 	</select>
 	

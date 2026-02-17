@@ -1,92 +1,121 @@
-# 🏙️ KozyNest - 숙소예약 (Lodging Service)
+# KozyNest LodgingService
 
-프로젝트명: KozyNest - Korean Comfort Lodging
+KozyNest is a Spring MVC-based lodging reservation platform where:
+- Hosts register accommodations and rooms.
+- Guests search accommodations and make bookings.
+- Admins manage users, host approvals, inquiries, and revenue views.
 
-프로젝트 제작 기간: 2023.03.27 ~ 20223.04.12
+## Project Timeline
+- Initial project build: **March 27, 2023 - April 12, 2023**
+- Enhancement program (current modernization branch): **February 17, 2026**
 
+## Original Project Scope
+- Guest and host account flows (signup/login)
+- Accommodation and room listing
+- Booking and booking management
+- My page (guest/host account pages)
+- Q&A and review features
+- Admin pages for member/host management and revenue dashboard
+- Oracle DB + MyBatis persistence layer
 
+## Architecture Snapshot
+- **Presentation layer**: Spring MVC controllers + JSP views for guest/host/admin experiences.
+- **Business layer**: Service interfaces and implementations for booking, accommodation, room, member, host, review, and Q&A domains.
+- **Persistence layer**: MyBatis mappers/DAO classes backed by Oracle.
+- **Operational support**: Global exception handling, request logging filter, and metrics endpoint.
 
-### 🧳 프로젝트 개요 (Project Overview)
+## Functional Sitemap (Text Version)
+- **Public/Guest**
+  - Home, location-based search, accommodation list, room list/detail
+  - Guest signup/login, account recovery/reset
+  - Booking flow and guest mypage
+- **Host**
+  - Host signup/login
+  - Accommodation and room management
+  - Booking status and host mypage
+- **Admin**
+  - Admin login
+  - Host approval and user management
+  - Q&A moderation
+  - Revenue reporting
 
-KozyNest 프로젝트의 목적은 백엔드 측면에 초점을 맞춘 숙박 웹 프로그램을 구축하는 것이었습니다. 프로젝트의 목표는 숙박 업주가 자신의 숙소를 등록하고 손님들이 이 숙소를 예약할 수 있는 완전히 기능이 구현된 웹사이트를 만드는 것이었습니다.
-
-# 🏙️ 프로젝트 구성 및 설계
-
-### 🧳 Database ERD
-
-![ERD.jpg](kozynest/Picture1.jpg)
-
-###  🧳 Site Map
-
-![Sitemap.jpg](kozynest/Picture2.jpg)
-
-
-### 🧳 사용된 기술 (Technologies Used)
-
-**개발환경**
-
-- Windows 10
-- Eclipse IDE
-- Oracle SQL Developer
-- Github
-
-**DB & WAS**
-- Oracle
-- Apache Tomcat 9.0
-
-**백앤드**
-
-- Spring MVC
-- Spring AOP
+## Tech Stack
 - Java 11
+- Spring MVC / Spring Context / Spring JDBC
+- MyBatis
 - Oracle Database
-- Mybatis
+- JSP / JSTL / HTML / CSS / JavaScript / jQuery
+- Apache Tomcat 9
+- Maven
 
-**프론트앤드**
+## Run Requirements
+- JDK 11+
+- Maven 3.8.6+
+- Oracle Database (with schema/data import from `SQL_Kozynest`)
+- Apache Tomcat 9
 
-- HTML/CSS
-- JavaScript
-- Bootstrap
-- JQuery
-- Ajax
+## Local Setup (Summary)
+1. Clone repository.
+2. Prepare Oracle schema/data using files under `SQL_Kozynest`.
+3. Configure DB settings (see `docs/configuration.md`).
+4. Build and run on Tomcat.
+5. Open app at `http://localhost:8080/biz`.
 
-# 🏙️ KOZYNEST 설치 가이드
+## Configuration and Secrets
+This project supports profile-based config and external secret overrides.
 
-### 🧳 요구 사항 (Requirements)
-- JDK 11 이상
-- Eclipse IDE for Java EE Developers
-- Apache Tomcat 9.0 
-- Oracle SQL Developer
+- Default profile: `dev`
+- DB property resolution order:
+1. `src/main/resources/config/database.properties`
+2. `src/main/resources/config/database-{profile}.properties`
+3. `${user.home}/.kozynest/database-{profile}.properties` (optional local override)
 
-### 🧳 설치 및 실행 방법
-1. SQL Developer에 system개정에서 kozynest 사용자를 생성하고 권한을 부여합니다.
- 
-```
-CREATE USER kozynest IDENTIFIED BY 1234;
-GRANT dba TO kozynest;
-```
+Use:
+- `.env.example`
+- `src/main/resources/config/database.properties.example`
+- `docs/configuration.md`
 
-2. 새로운 데이터베이스를 접속합니다
-  - 접속 이름: KOZYNEST
-  - 사용자 이름: kozynest
-  - 비밀번호: 1234
+## API-First Additions
+Incremental REST endpoints are now available:
+- `GET /api/health`
+- `GET /api/accommodations?page=1&size=10&key=...`
+- `GET /api/accommodations/{aseq}`
+- `GET /api/metrics`
 
-3. Kozynest Repository를 클론 합니다
- 
-```
-git clone https://github.com/sbdkim/LodgingService.git
-```
+Reference: `docs/api.md`
 
-4.  클론 한 LodgingService 안에 SQL_Kozynest파일을 여시고 Kozynest.sql 에 있는 SQL을 새로 접속된 데이터베이스에 순서대로 수행합니다.
+## Security and Quality Enhancements (Feb 17, 2026)
+Enhancements were delivered as a focused modernization series across:
 
-5. 임포트 된 테이블에 SQL_Kozynest에 담겨있는 .xlxs 파일들을 "임포트행 설정.txt" 순서별로 하나씩 임포트 해줍니다. 
+- **Dependency and vulnerability posture**
+  - Updated vulnerable dependencies and added automated OWASP dependency scanning in CI.
+- **Authentication and account security**
+  - BCrypt-based password handling, safer reset-token flow, and login hardening.
+- **Configuration and secret management**
+  - Profile-based configuration, environment variable support, and machine-local secret override patterns.
+- **Input and request hardening**
+  - Validation improvements and standardized safe parsing/sanitization for paging and query inputs.
+- **File upload security**
+  - Size limits, content checks, extension/MIME validation, and safer upload handling.
+- **Error handling and observability**
+  - Unified error handling with proper HTTP status codes, request correlation IDs, structured Log4j2 logging, and runtime request metrics.
+- **Architecture evolution**
+  - Introduced initial `/api` endpoints while preserving existing JSP flows.
+- **Quality engineering**
+  - Expanded test coverage for core controller and API behaviors.
+- **UX and accessibility improvements**
+  - UI consistency updates and safer login form defaults/attributes.
 
-6. Eclipse를 실행하고 File > Open Projects from File System을 선택합니다.
+## CI and Security Audit
+- CI workflow: `.github/workflows/ci.yml`
+- Dependency vulnerability scanning is enforced with OWASP Dependency-Check profile:
+  - Run locally: `mvn -Psecurity-audit verify`
+  - Details: `docs/security-audit.md`
 
-7. 다운로드한 프로젝트 폴더를 선택하고 Finish를 클릭합니다.
+## Testing
+- Unit tests are available under `src/test/java`.
+- Utility tests and controller-focused tests were added as part of the enhancement cycle.
 
-8. Project Explorer에서 프로젝트를 선택하고 Run As > Run on Server를 클릭합니다.
-
-9. Tomcat 서버가 설치되어 있지 않은 경우, Manually define a new server를 선택하고 설치된 Tomcat 버전을 선택합니다.
-
-10. 브라우저에서 http://localhost:8080/biz 에 접속하여 웹 애플리케이션을 확인합니다.
+## Notes
+- This repository contains legacy JSP + Spring MVC architecture with incremental modernization.
+- Existing web flows remain functional while API-first endpoints are being introduced in parallel.

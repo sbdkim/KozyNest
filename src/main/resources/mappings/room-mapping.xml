@@ -44,11 +44,21 @@
 		SELECT count(*) FROM room WHERE aseq = #{aseq}
 	</select>
 	
-	<select id="listRoomWithPaging" resultType="room">
+	<select id="listRoomWithPaging" parameterType="hashmap" resultType="room">
 		<![CDATA[
-		SELECT * FROM
-		(SELECT row_number() OVER (ORDER BY rname) rn, rname, price, maxcap, ckintime, ckouttime, rooms, bathroom, bed, wifi, kitchen, pool, ac, tv, coffeemachine, fridge, bathtub, parking, heater, microwave, kettle, washer, bbq, hairdrier, amenity, towel, elevator, breakfast, smoking, gym, roomservice, image
-		FROM room WHERE aseq = #{aseq}
+		SELECT rseq, aseq, rname, price, maxcap, ckintime, ckouttime, rooms, bathroom, bed,
+		       wifi, kitchen, pool, ac, tv, coffeemachine, fridge, bathtub, parking, heater,
+		       microwave, kettle, washer, bbq, hairdrier, amenity, towel, elevator, breakfast,
+		       smoking, gym, roomservice, rimage
+		FROM (
+		    SELECT row_number() OVER (ORDER BY rseq DESC) rn,
+		           rseq, aseq, rname, price, maxcap, ckintime, ckouttime, rooms, bathroom, bed,
+		           wifi, kitchen, pool, ac, tv, coffeemachine, fridge, bathtub, parking, heater,
+		           microwave, kettle, washer, bbq, hairdrier, amenity, towel, elevator, breakfast,
+		           smoking, gym, roomservice, rimage
+		    FROM room
+		    WHERE aseq = #{aseq}
+		)
 		WHERE rn <= #{criteria.pageNum} * #{criteria.rowsPerPage}
 		AND rn > (#{criteria.pageNum}-1) * #{criteria.rowsPerPage}
 		]]>

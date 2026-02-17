@@ -7,7 +7,7 @@ import com.ezen.biz.dao.AdminDAO;
 import com.ezen.biz.dto.AdminVO;
 import com.ezen.biz.dto.HostVO;
 
-@Service("adminService")
+@Service
 public class AdminServiceImpl implements AdminService {
 
 	@Autowired
@@ -17,11 +17,11 @@ public class AdminServiceImpl implements AdminService {
 	public int adminCheck(AdminVO vo) {
 		String pwd_in_db = aDao.adminCheck(vo.getEmail());
 		if (pwd_in_db == null) {
-			return -1; // 관리자 email이 존재하지 않음
+			return -1; // admin email does not exist
 		} else if (pwd_in_db.equals(vo.getPwd())) {
-			return 1; // 정상적인 관리자
+			return 1; // valid admin credentials
 		} else {
-			return 0; // 비밀번호 틀림
+			return 0; // password mismatch
 		}
 	}
 

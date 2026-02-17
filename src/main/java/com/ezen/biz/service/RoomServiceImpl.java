@@ -11,7 +11,7 @@ import com.ezen.biz.dto.RoomVO;
 
 import utils.Criteria;
 
-@Service("roomService")
+@Service
 public class RoomServiceImpl implements RoomService {
 
 	@Autowired
@@ -69,3 +69,4 @@ public class RoomServiceImpl implements RoomService {
 	}
 
 }
+
