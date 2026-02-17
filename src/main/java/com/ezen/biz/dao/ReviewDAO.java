@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -14,52 +16,44 @@ import utils.Criteria;
 @Repository
 public class ReviewDAO {
 
+	private static final Logger logger = LoggerFactory.getLogger(ReviewDAO.class);
+
 	@Autowired
 	private SqlSessionTemplate mybatis;
 
-	// 리뷰 등록
 	public int insertReview(ReviewVO vo) {
-		
-		 return mybatis.insert("ReviewMapper.insertReview", vo);
+		return mybatis.insert("ReviewMapper.insertReview", vo);
 	}
 
-	// 객실번호로 리뷰 조회
 	public List<ReviewVO> selectReviewByRseq(int rseq) {
 		return mybatis.selectList("ReviewMapper.selectReviewByRseq", rseq);
 	}
 
-	// 리뷰수정
 	public void updateReview(ReviewVO vo) {
 		mybatis.update("ReviewMapper.updateReview", vo);
 	}
 
-	// 리뷰삭제
-	public  void deleteReview(ReviewVO vo) {
-		System.out.println("email: " + vo.getEmail());
-		System.out.println("reseq: " + vo.getReseq());
+	public void deleteReview(ReviewVO vo) {
+		logger.debug("Deleting review in DAO reseq={}, email={}", vo.getReseq(), vo.getEmail());
 		mybatis.delete("ReviewMapper.deleteReview", vo);
 	}
 
-	// 전체 리뷰 조회
 	public List<ReviewVO> getListReview() {
 		return mybatis.selectList("ReviewMapper.getListReview");
 	}
 
-	// 리뷰 답글 달기
 	public void insertReply(ReviewVO vo) {
 		mybatis.update("ReviewMapper.insertReply", vo);
 	}
-	
-	public List<ReviewVO> reviewListwithPaging(Criteria criteria, int rseq){	
+
+	public List<ReviewVO> reviewListwithPaging(Criteria criteria, int rseq) {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("criteria", criteria);
 		map.put("rseq", rseq);
-		List<ReviewVO> list = mybatis.selectList("ReviewMapper.reviewListwithPaging", map);
-		return list;
+		return mybatis.selectList("ReviewMapper.reviewListwithPaging", map);
 	}
-	
+
 	public int getCountReviewList(int rseq) {
-		return mybatis.selectOne("ReviewMapper.countReviewList",rseq);
+		return mybatis.selectOne("ReviewMapper.countReviewList", rseq);
 	}
-	
-}//ReviewDAO
+}

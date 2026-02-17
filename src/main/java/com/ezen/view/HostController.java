@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +29,7 @@ import com.ezen.biz.service.UploadStorageService;
 
 @Controller
 public class HostController {
+	private static final Logger logger = LoggerFactory.getLogger(HostController.class);
 
 	@Autowired
 	private BookingService bookingService;
@@ -155,7 +158,7 @@ public class HostController {
 		} else {
 			vo.setHemail(loginHost.getHemail());
 
-			System.out.println("AccommodationDetail(): Accommodation=" + vo);
+			logger.debug("Loading accommodation detail: {}", vo);
 			AccommodationVO accommodationDetail = accommodationService.getAccommodation(vo);
 
 			accommodationDetail.setAseq(accommodationDetail.getAseq());
@@ -280,7 +283,7 @@ public class HostController {
 			return "member/login";
 		} else {
 			
-			System.out.println("vo.getStatus 12 : " + vo.getStatus());
+			logger.debug("Host booking detail requested, status={}", vo.getStatus());
 			
 			vo.setHemail(loginHost.getHemail());
 			if (vo.getStatus() < 1 || vo.getStatus() > 3) {
@@ -305,9 +308,7 @@ public class HostController {
 	public String hostBookingDelete(@RequestParam(value = "bseq") int bseq,
 			@RequestParam(value = "status") int status,@RequestParam(value = "aseq") int aseq
 			) {
-		System.out.println("status: " + status);
-		System.out.println("bseq: " + bseq);
-		System.out.println("aseq: " + aseq);
+		logger.info("Deleting booking bseq={} for aseq={} with status={}", bseq, aseq, status);
 		
 		bookingService.deleteBookByBseq(bseq);
 
