@@ -15,6 +15,7 @@
 		<org.aspectj-version>1.9.19</org.aspectj-version>
 		<org.slf4j-version>1.7.36</org.slf4j-version>
 		<org.log4j2-version>2.23.1</org.log4j2-version>
+		<owasp.dependency-check.version>9.2.0</owasp.dependency-check.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -227,4 +228,34 @@
             </plugin>
         </plugins>
     </build>
+	<profiles>
+		<profile>
+			<id>security-audit</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.owasp</groupId>
+						<artifactId>dependency-check-maven</artifactId>
+						<version>${owasp.dependency-check.version}</version>
+						<configuration>
+							<failBuildOnCVSS>7</failBuildOnCVSS>
+							<formats>
+								<format>HTML</format>
+								<format>JSON</format>
+							</formats>
+						</configuration>
+						<executions>
+							<execution>
+								<id>dependency-vulnerability-scan</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>check</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
