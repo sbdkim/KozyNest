@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../header.jsp"%>
 <style>
 input[type="button"], input[type="submit"] {
@@ -33,15 +33,15 @@ input[type="button"], input[type="submit"] {
         <div class="tab_first_content">
           <h2>Guest</h2>
           <article>
-            <form method="post" action="login">
+            <form method="post" action="login" autocomplete="on">
               <table>
                 <tr>
                   <td><label>User email</label></td>
-                  <td><input name="email" type="text"></td>
+                  <td><input name="email" type="email" autocomplete="username" required></td>
                 </tr>
                 <tr>
                   <td><label>Password</label></td>
-                  <td><input name="pwd" type="password"></td>
+                  <td><input name="pwd" type="password" autocomplete="current-password" required></td>
                 </tr>
               </table>
               <div id="buttons">
@@ -56,15 +56,15 @@ input[type="button"], input[type="submit"] {
         <div class="tab_second_content">
           <h2>Host</h2>
           <article>
-            <form method="post" action="hostlogin">
+            <form method="post" action="hostlogin" autocomplete="on">
               <table>
                 <tr>
                   <td><label>Host email</label></td>
-                  <td><input name="hemail" type="text"></td>
+                  <td><input name="hemail" type="email" autocomplete="username" required></td>
                 </tr>
                 <tr>
                   <td><label>Password</label></td>
-                  <td><input name="pwd" type="password"></td>
+                  <td><input name="pwd" type="password" autocomplete="current-password" required></td>
                 </tr>
               </table>
               <div id="buttons">
