@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ezen.biz.dto.AccommodationVO;
 import com.ezen.biz.service.AccommodationService;
+import com.ezen.view.metrics.RequestMetricsRegistry;
 
 import utils.Criteria;
 
@@ -30,6 +31,11 @@ public class PublicApiController {
 		response.put("status", "ok");
 		response.put("service", "LodgingService");
 		return response;
+	}
+
+	@GetMapping("/metrics")
+	public Map<String, Object> metrics() {
+		return RequestMetricsRegistry.getInstance().snapshot();
 	}
 
 	@GetMapping("/accommodations")

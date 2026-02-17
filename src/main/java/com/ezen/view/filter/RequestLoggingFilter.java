@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ import org.slf4j.MDC;
 
 import com.ezen.biz.dto.HostVO;
 import com.ezen.biz.dto.MemberVO;
+import com.ezen.view.metrics.RequestMetricsRegistry;
 
 public class RequestLoggingFilter implements Filter {
 
@@ -38,8 +40,10 @@ public class RequestLoggingFilter implements Filter {
 		}
 
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		HttpServletResponse httpResponse = response instanceof HttpServletResponse ? (HttpServletResponse) response : null;
 		String requestId = UUID.randomUUID().toString().replace("-", "");
 		long startedAt = System.currentTimeMillis();
+		int status = 200;
 
 		MDC.put("requestId", requestId);
 		MDC.put("method", httpRequest.getMethod());
@@ -48,13 +52,27 @@ public class RequestLoggingFilter implements Filter {
 
 		try {
 			chain.doFilter(request, response);
+			if (httpResponse != null) {
+				status = httpResponse.getStatus();
+			}
+		} catch (IOException ex) {
+			status = 500;
+			throw ex;
+		} catch (ServletException ex) {
+			status = 500;
+			throw ex;
+		} catch (RuntimeException ex) {
+			status = 500;
+			throw ex;
 		} finally {
 			long elapsedMs = System.currentTimeMillis() - startedAt;
-			if (elapsedMs >= SLOW_REQUEST_THRESHOLD_MS) {
+			boolean slowRequest = elapsedMs >= SLOW_REQUEST_THRESHOLD_MS;
+			RequestMetricsRegistry.getInstance().record(status, elapsedMs, slowRequest);
+			if (slowRequest) {
 				logger.warn("Slow request detected: {} {} completed in {} ms", httpRequest.getMethod(),
 						httpRequest.getRequestURI(), elapsedMs);
 			} else {
-				logger.info("Request completed in {} ms", elapsedMs);
+				logger.info("Request completed in {} ms with status {}", elapsedMs, status);
 			}
 			MDC.clear();
 		}

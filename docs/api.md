@@ -9,6 +9,8 @@ This project now exposes incremental API-first endpoints in parallel with JSP pa
   - Returns paged accommodation summaries.
 - `GET /api/accommodations/{aseq}`
   - Returns one accommodation detail item.
+- `GET /api/metrics`
+  - Returns in-memory request metrics (uptime, request counts, error counts, latency stats).
 
 ## Error format
 API endpoints return JSON error payloads:
