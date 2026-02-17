@@ -49,12 +49,12 @@
 	
 	<!-- 전체 회원 정보 조회 -->
 	<select id="memberList" resultType="member">
-		SELECT * FROM member ORDER BY ASC
+		SELECT * FROM member ORDER BY name ASC
 	</select>
 	
 	
 	<delete id="deleteMember">
-		DELETE FROM member where email='${email}'
+		DELETE FROM member WHERE email=#{email}
 	</delete>	
 	
 	<select id="listMemberWithPaging" resultType="member">

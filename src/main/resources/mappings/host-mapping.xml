@@ -60,7 +60,7 @@
 	</update>
 	
 	<delete id="deleteHost">
-		DELETE FROM host where hemail='${email}'
+		DELETE FROM host WHERE hemail=#{email}
 	</delete>	
 
 	
