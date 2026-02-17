@@ -10,7 +10,7 @@ import com.ezen.biz.dto.ReviewVO;
 
 import utils.Criteria;
 
-@Service("reviewService")
+@Service
 public class ReviewServiceImpl implements ReviewService {
 
 	@Autowired
@@ -59,3 +59,4 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 }
+

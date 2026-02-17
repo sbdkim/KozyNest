@@ -10,7 +10,7 @@ import com.ezen.biz.dto.HostVO;
 
 import utils.Criteria;
 
-@Service("hostService")
+@Service
 public class HostServiceImpl implements HostService {
 
 	@Autowired
@@ -93,3 +93,4 @@ public class HostServiceImpl implements HostService {
 	
 
 }
+

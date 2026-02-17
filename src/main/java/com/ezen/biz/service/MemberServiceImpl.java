@@ -10,7 +10,7 @@ import com.ezen.biz.dto.MemberVO;
 
 import utils.Criteria;
 
-@Service("memebrService")
+@Service
 public class MemberServiceImpl implements MemberService {
 
 	@Autowired
@@ -83,3 +83,4 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 }
+
