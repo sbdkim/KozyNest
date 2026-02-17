@@ -2,9 +2,12 @@ package com.ezen.view;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +45,12 @@ public class MemberController {
 	}
 
 	@PostMapping("/login")
-	public String loginAction(MemberVO vo, Model model) {
+	public String loginAction(@Valid MemberVO vo, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasFieldErrors("email") || bindingResult.hasFieldErrors("pwd")) {
+			model.addAttribute("message", "Please provide a valid email and password.");
+			return "member/login";
+		}
+
 		int result = memberService.loginMember(vo);
 
 		if (result == 1) {
@@ -56,12 +64,17 @@ public class MemberController {
 	}
 
 	@PostMapping("/hostlogin")
-	public String loginAction(HostVO vo, Model model) {
+	public String loginAction(@Valid HostVO vo, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasFieldErrors("hemail") || bindingResult.hasFieldErrors("pwd")) {
+			model.addAttribute("message", "Please provide a valid host email and password.");
+			return "member/login";
+		}
+
 		System.out.println(vo.toString());
 		String hostEmail = vo.getHemail();
 		
 		// admin login
-		if (hostEmail.equals("kozynest0330@gmail.com") || hostEmail.equals("kozynest1104@gmail.com")
+		if ("kozynest0330@gmail.com".equals(hostEmail) || "kozynest1104@gmail.com".equals(hostEmail)
 				|| hostEmail.equals("kozynest0116@gmail.com") || hostEmail.equals("kozynest0331@gmail.com") || hostEmail.equals("kozynest862@gmail.com")) {
 			System.out.println(hostEmail);
 			int result = adminService.loginAdmin(vo);
@@ -159,14 +172,24 @@ public class MemberController {
 
 	// 회원가입 처리
 	@PostMapping("/join")
-	public String joinAction(MemberVO vo) {
+	public String joinAction(@Valid MemberVO vo, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("message", "Please check the required fields and try again.");
+			return "member/join";
+		}
+
 		memberService.insertMember(vo);
 		return "member/login";
 	}
 
 	// 사업자 회원가입 처리
 	@PostMapping("/hostjoin")
-	public String hostJoinAction(HostVO vo) {
+	public String hostJoinAction(@Valid HostVO vo, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("message", "Please check the required fields and try again.");
+			return "member/join";
+		}
+
 		hostService.insertHost(vo);
 		return "member/login";
 	}
@@ -203,7 +226,12 @@ public class MemberController {
 	}
 
 	@PostMapping("/change_pwd")
-	public String changePwdAction(MemberVO vo) {
+	public String changePwdAction(@Valid MemberVO vo, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasFieldErrors("email") || bindingResult.hasFieldErrors("pwd")) {
+			model.addAttribute("message", -1);
+			return "member/findPwdResult";
+		}
+
 		memberService.changePwd(vo);
 		return "member/changePwdOk";
 	}
@@ -240,7 +268,12 @@ public class MemberController {
 	}
 
 	@PostMapping("/change_host_pwd")
-	public String changeHostPwdAction(HostVO vo) {
+	public String changeHostPwdAction(@Valid HostVO vo, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasFieldErrors("hemail") || bindingResult.hasFieldErrors("pwd")) {
+			model.addAttribute("message", -1);
+			return "member/findHostPwdResult";
+		}
+
 		hostService.changePwd(vo);
 		return "member/changePwdOk";
 	}
