@@ -18,6 +18,27 @@ KozyNest is a Spring MVC-based lodging reservation platform where:
 - Admin pages for member/host management and revenue dashboard
 - Oracle DB + MyBatis persistence layer
 
+## Architecture Snapshot
+- **Presentation layer**: Spring MVC controllers + JSP views for guest/host/admin experiences.
+- **Business layer**: Service interfaces and implementations for booking, accommodation, room, member, host, review, and Q&A domains.
+- **Persistence layer**: MyBatis mappers/DAO classes backed by Oracle.
+- **Operational support**: Global exception handling, request logging filter, and metrics endpoint.
+
+## Functional Sitemap (Text Version)
+- **Public/Guest**
+  - Home, location-based search, accommodation list, room list/detail
+  - Guest signup/login, account recovery/reset
+  - Booking flow and guest mypage
+- **Host**
+  - Host signup/login
+  - Accommodation and room management
+  - Booking status and host mypage
+- **Admin**
+  - Admin login
+  - Host approval and user management
+  - Q&A moderation
+  - Revenue reporting
+
 ## Tech Stack
 - Java 11
 - Spring MVC / Spring Context / Spring JDBC
@@ -64,30 +85,26 @@ Incremental REST endpoints are now available:
 Reference: `docs/api.md`
 
 ## Security and Quality Enhancements (Feb 17, 2026)
-The following enhancement commits were completed during the latest upgrade cycle:
+Enhancements were delivered as a focused modernization series across:
 
-1. `67201ca` Add request correlation logging and structured Log4j2 config  
-2. `2411e39` Add environment config templates and secret handling docs  
-3. `27650e7` Introduce initial /api endpoints and JSON API error handling  
-4. `3253fb9` Add unit tests for new public API controller contracts  
-5. `898a688` Harden accommodation search inputs and add controller unit tests  
-6. `ccd14df` Add runtime request metrics registry and /api/metrics endpoint  
-7. `07e95a4` Standardize safe request param parsing across admin qna and room flows  
-8. `1982005` Harden login forms by removing default creds and adding safe autofill hints  
-9. `c2ffc07` Return proper HTTP status codes in MVC error handler with request id  
-10. `9bee740` Add CI dependency vulnerability audit with OWASP profile  
-
-Additional foundational enhancement commits in this modernization program:
-- `67e84f6` Add environment profiles and externalized DB config
-- `702f919` Add global exception handling and unified error page
-- `d15e90d` Harden input validation for auth and signup flows
-- `4a15076` Standardize service boundaries and transaction scope
-- `ca3385b` Fix DAO mapper correctness and safe SQL bindings
-- `ba9e700` Refresh shared UI shell and homepage layout
-- `8d3c07a` Improve accessibility semantics and keyboard focus UX
-- `34c446f` Add CI workflow and baseline unit tests
-- `63786d7` Harden auth with BCrypt, reset tokens, and lockout
-- `5e61871` Harden file uploads with validation and external storage
+- **Dependency and vulnerability posture**
+  - Updated vulnerable dependencies and added automated OWASP dependency scanning in CI.
+- **Authentication and account security**
+  - BCrypt-based password handling, safer reset-token flow, and login hardening.
+- **Configuration and secret management**
+  - Profile-based configuration, environment variable support, and machine-local secret override patterns.
+- **Input and request hardening**
+  - Validation improvements and standardized safe parsing/sanitization for paging and query inputs.
+- **File upload security**
+  - Size limits, content checks, extension/MIME validation, and safer upload handling.
+- **Error handling and observability**
+  - Unified error handling with proper HTTP status codes, request correlation IDs, structured Log4j2 logging, and runtime request metrics.
+- **Architecture evolution**
+  - Introduced initial `/api` endpoints while preserving existing JSP flows.
+- **Quality engineering**
+  - Expanded test coverage for core controller and API behaviors.
+- **UX and accessibility improvements**
+  - UI consistency updates and safer login form defaults/attributes.
 
 ## CI and Security Audit
 - CI workflow: `.github/workflows/ci.yml`
