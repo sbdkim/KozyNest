@@ -90,3 +90,32 @@ git clone https://github.com/sbdkim/LodgingService.git
 9. Tomcat 서버가 설치되어 있지 않은 경우, Manually define a new server를 선택하고 설치된 Tomcat 버전을 선택합니다.
 
 10. 브라우저에서 http://localhost:8080/biz 에 접속하여 웹 애플리케이션을 확인합니다.
+
+## Configuration Profiles
+
+- Default profile is `dev` (set in `src/main/webapp/WEB-INF/web.xml`).
+- Database properties are loaded in this order:
+  1. `src/main/resources/config/database.properties`
+  2. `src/main/resources/config/database-{profile}.properties`
+  3. `${user.home}/.kozynest/database-{profile}.properties` (optional, not in git)
+
+### Example local override (recommended)
+
+Create `${user.home}/.kozynest/database-dev.properties`:
+
+```properties
+jdbc.driver=oracle.jdbc.driver.OracleDriver
+jdbc.url=jdbc:oracle:thin:@localhost:1521:XE
+jdbc.username=your_user
+jdbc.password=your_password
+```
+
+### Production profile
+
+Use `database-prod.properties` with environment variables:
+
+```properties
+jdbc.url=${DB_URL}
+jdbc.username=${DB_USERNAME}
+jdbc.password=${DB_PASSWORD}
+```
