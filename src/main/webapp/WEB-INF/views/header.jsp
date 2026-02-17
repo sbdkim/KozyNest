@@ -43,6 +43,7 @@ function requestPay() {
 </script>
 </head>
 <body class="app-shell">
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <header class="site-header">
 	<div class="site-header-inner">
 		<a class="site-logo" href="index" aria-label="KozyNest Home">

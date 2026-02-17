@@ -1,30 +1,35 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="header.jsp"%>
 
-<section class="hero-home">
-	<div class="hero-content">
-		<h1 class="hero-title">Find Your Next Stay</h1>
-		<p class="hero-subtitle">Comfortable rooms across Korea, ready for your trip.</p>
+<main id="main-content">
+	<section class="hero-home">
+		<div class="hero-content">
+			<h1 class="hero-title">Find Your Next Stay</h1>
+			<p class="hero-subtitle">Comfortable rooms across Korea, ready for your trip.</p>
 
-		<form action="acc_search_list" name="f" method="get" class="hero-search-form">
-			<input type="search" class="main_search_text" placeholder="Seoul, Busan, Jeju" name="key" id="key" required>
-			<input type="date" id="checkin" class="main_checkin_1" name="checkin" required>
-			<input type="date" id="checkout" class="main_checkout_1" name="checkout" required>
-			<select id="select_ro_count" name="ro_count" class="guest-select" aria-label="Guest count">
-				<option value="1">1</option>
-				<option value="2" selected>2</option>
-				<option value="3">3</option>
-				<option value="4">4</option>
-			</select>
-			<button type="submit" class="btn main_search_button">Search</button>
-		</form>
-	</div>
-</section>
+			<form action="acc_search_list" name="f" method="get" class="hero-search-form">
+				<label class="visually-hidden" for="key">Destination</label>
+				<input type="search" class="main_search_text" placeholder="Seoul, Busan, Jeju" name="key" id="key" required>
+				<label class="visually-hidden" for="checkin">Check-in date</label>
+				<input type="date" id="checkin" class="main_checkin_1" name="checkin" required>
+				<label class="visually-hidden" for="checkout">Check-out date</label>
+				<input type="date" id="checkout" class="main_checkout_1" name="checkout" required>
+				<label class="visually-hidden" for="select_ro_count">Guest count</label>
+				<select id="select_ro_count" name="ro_count" class="guest-select" aria-label="Guest count">
+					<option value="1">1</option>
+					<option value="2" selected>2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+				</select>
+				<button type="submit" class="btn main_search_button">Search</button>
+			</form>
+		</div>
+	</section>
 
 <input type="hidden" id="today" name="today">
 <input type="hidden" id="tomorrow" name="tomorrow">
 
-<section class="home-section">
+	<section class="home-section">
 	<div class="white-box">
 		<h3 class="section-title">Browse Popular Regions</h3>
 		<div id="regionacc" class="row region-grid">
@@ -68,7 +73,8 @@
 			</c:forEach>
 		</div>
 	</div>
-</section>
+	</section>
+</main>
 
 <script>
 	const today = new Date().toISOString().split('T')[0];
