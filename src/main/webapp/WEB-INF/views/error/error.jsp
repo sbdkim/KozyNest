@@ -55,6 +55,7 @@ p {
 			<p>${errorMessage}</p>
 			<p class="meta">Error code: ${errorCode}</p>
 			<p class="meta">Request path: ${requestPath}</p>
+			<p class="meta">Request id: ${requestId}</p>
 			<div class="actions">
 				<a class="btn" href="${pageContext.request.contextPath}/index">Go to Home</a>
 			</div>
