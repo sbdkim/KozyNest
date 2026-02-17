@@ -1,7 +1,5 @@
 package com.ezen.view;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -25,6 +23,7 @@ import com.ezen.biz.dto.SalesQuantity;
 import com.ezen.biz.service.AccommodationService;
 import com.ezen.biz.service.BookingService;
 import com.ezen.biz.service.RoomService;
+import com.ezen.biz.service.UploadStorageService;
 
 @Controller
 public class HostController {
@@ -35,6 +34,8 @@ public class HostController {
 	private AccommodationService accommodationService;
 	@Autowired
 	private RoomService roomService;
+	@Autowired
+	private UploadStorageService uploadStorageService;
 
 	@PostMapping("/host_accommodation_write_form")
 	public String hostAccommodationWriteView(Model model) {
@@ -57,18 +58,8 @@ public class HostController {
 			vo.setHemail(loginHost.getHemail());
 
 			if (!uploadFile.isEmpty()) {
-				String fileName = uploadFile.getOriginalFilename();
+				String fileName = uploadStorageService.storeAccommodationImage(uploadFile);
 				vo.setAimage(fileName);
-
-				String image_path = session.getServletContext().getRealPath("WEB-INF/resources/accommodation_images/");
-
-				try {
-					uploadFile.transferTo(new File(image_path + fileName));
-				} catch (IllegalStateException | IOException e) {
-
-					e.printStackTrace();
-				}
-
 			} else {
 				vo.setAimage("default.jpg");
 			}
@@ -98,16 +89,8 @@ public class HostController {
 			@RequestParam(value = "nonmakeImg") String org_image, HttpSession session) {
 
 		if (!uploadFile.isEmpty()) {
-			String fileName = uploadFile.getOriginalFilename();
+			String fileName = uploadStorageService.storeAccommodationImage(uploadFile);
 			vo.setAimage(fileName);
-
-			String image_path = session.getServletContext().getRealPath("WEB-INF/resources/accommodation_images/");
-
-			try {
-				uploadFile.transferTo(new File(image_path + fileName));
-			} catch (IllegalStateException | IOException e) {
-				e.printStackTrace();
-			}
 		} else {
 			vo.setAimage(org_image);
 		}
@@ -217,18 +200,8 @@ public class HostController {
 			vo.setHemail(loginHost.getHemail());
 
 			if (!uploadFile.isEmpty()) {
-				String fileName = uploadFile.getOriginalFilename();
+				String fileName = uploadStorageService.storeRoomImage(uploadFile);
 				vo.setRimage(fileName);
-
-				String image_path = session.getServletContext().getRealPath("WEB-INF/resources/room_images/");
-
-				try {
-					uploadFile.transferTo(new File(image_path + fileName));
-				} catch (IllegalStateException | IOException e) {
-
-					e.printStackTrace();
-				}
-
 			} else {
 				vo.setRimage("default.jpg");
 			}
@@ -259,16 +232,8 @@ public class HostController {
 			RedirectAttributes rattr) {
 
 		if (!uploadFile.isEmpty()) {
-			String fileName = uploadFile.getOriginalFilename();
+			String fileName = uploadStorageService.storeRoomImage(uploadFile);
 			vo.setRimage(fileName);
-
-			String image_path = session.getServletContext().getRealPath("WEB-INF/resources/room_images/");
-
-			try {
-				uploadFile.transferTo(new File(image_path + fileName));
-			} catch (IllegalStateException | IOException e) {
-				e.printStackTrace();
-			}
 		} else {
 			vo.setRimage(org_image);
 		}
